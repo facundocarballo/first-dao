@@ -2,17 +2,21 @@ import fs from "fs";
 import solc from "solc";
 
 // Get path and load contract
-const source = fs.readFileSync('../contracts/contracts.sol', 'utf8');
+const source = fs.readFileSync('../contracts/Token.sol', 'utf8');
 
 // Create input object
 const input = {
     language: 'Solidity',
     sources: {
-        'contracts.sol': {
+        'Token.sol': {
             content: source,
         },
     },
     settings: {
+        optimizer: {
+            enabled: false,
+            runs: 200
+        },
         outputSelection: {
             '*': {
                 '*': ['*'],
@@ -24,7 +28,9 @@ const input = {
 // Compile the contract
 const tempFile = JSON.parse(solc.compile(JSON.stringify(input)));
 
-const contractFile = tempFile.contracts['contracts.sol']['Token'];
+console.log(tempFile);
+
+// const contractFile = tempFile.contracts['Governance.sol']['FacundoCarballoDAO'];
 
 console.log("Contract File: ", contractFile);
 
