@@ -2,7 +2,11 @@
 
 pragma solidity ^0.8.0;
 
-contract Incrementer {
+contract A {
+    uint256 public _a;
+}
+
+contract Incrementer is A {
     uint256 public number;
 
     constructor(uint256 _initialNumber) {
