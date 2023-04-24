@@ -4,11 +4,12 @@ const solc = require('solc');
 const Web3 = require('web3');
 
 // Constants
-const RPC = "https://rpc.api.moonbeam.network";
+const RPC = "https://data-seed-prebsc-1-s1.binance.org:8545/";
 const LANGUAGE = "Solidity";
 const UTF8 = "utf8";
 const SOURCES = "sources";
 const RUNS = 200;
+const MAIN_CURRENCY = "BNB";
 
 // Set up Web3
 const web3 = new Web3(RPC);
@@ -61,40 +62,39 @@ class Contract {
 
         // Create contract instance
         const contract = new web3.eth.Contract(abi);
-        console.log("Contract instance created...");
+
         // Create constructor instance
         const tx = contract.deploy({
             data: bytecode,
-            arguments: args
-        });
-        console.log("Contract Deploy created...");
-        let estimateGas = web3.utils.toWei('0.06', 'ether');
-        try {
-            estimateGas = await tx.estimateGas();
-            console.log("Estimate Gas: ", estimateGas);
-        } catch (err) {
-            console.log("ERROR: ", err);
-        }
+            arguments: args,
+            from: accountFrom.address
+        });        
+        
+
         // Sign transaction
+        const estimateGas = await tx.estimateGas();
         const createTransaction = await web3.eth.accounts.signTransaction(
             {
                 data: tx.encodeABI(),
                 gas: estimateGas,
-                gasLimit: web3.utils.toHex(web3.utils.toWei('10', 'ether')),
             },
             accountFrom.privateKey
         );
-        console.log("Contract Sign created...");
 
         // Send transaction
         const receipt = await web3.eth.sendSignedTransaction(createTransaction.rawTransaction);
-        console.log("Contract Send created...");
-
+        console.log(receipt);
         // Save the contract address
         this.address = receipt.contractAddress;
-
+        // Get the cost of the contract
+        const gasUsed_wei = receipt.cumulativeGasUsed;
+        const gasPrice_wei = receipt.effectiveGasPrice;
+        const gasUsed = web3.utils.fromWei(gasUsed_wei, 'ether');
+        const gasPrice = web3.utils.fromWei(gasPrice_wei, 'ether');
+        const contractCost = (Number(gasUsed) * Number(gasPrice)).toFixed(4);
         // Print message
         console.log(this.name + " deployed at address: " + this.address);
+        console.log("Cost: " + contractCost + MAIN_CURRENCY);
     }
 
 }
