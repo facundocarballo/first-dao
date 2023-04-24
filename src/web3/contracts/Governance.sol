@@ -4958,10 +4958,11 @@ contract FacundoCarballoDAO is Governor, GovernorSettings, GovernorCountingSimpl
         TimelockController _timelock,
         uint256 _quorum,
         uint256 _votingDelay,
-        uint256 _votingPeriod
+        uint256 _votingPeriod,
+        uint256 _threshold
     )
         Governor("Facundo Carballo DAO")
-        GovernorSettings(_votingDelay, _votingPeriod, 0)
+        GovernorSettings(_votingDelay, _votingPeriod, _threshold)
         GovernorVotes(_token)
         GovernorVotesQuorumFraction(_quorum)
         GovernorTimelockControl(_timelock)

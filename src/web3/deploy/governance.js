@@ -19,7 +19,8 @@ const deployGovernance = (Token, Timelock) => {
     const quorum = 5; // % of total supply of tokens needed to approve a proposal. (5%)
     const votingDelay = 0; // Amount of blocks to wait to make the proposal active.
     const votingPeriod = 5; // Amount of blocks to allow voters to vote.
-    const args = [Token, Timelock, quorum, votingDelay, votingPeriod];
+    const threshold = 0; // Minimum amount of votes that an account must have to create a proposal.
+    const args = [Token, Timelock, quorum, votingDelay, votingPeriod, threshold];
 
     // Deploy Contract.
     Governance.deploy(args);
